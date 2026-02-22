@@ -181,8 +181,6 @@ def main(argv):
         batch_size=512,
     )
 
-    assert model.device == "cuda"
-
     model.learn(
         total_timesteps=ARGS.max_steps,
         log_interval=1,

@@ -194,8 +194,6 @@ def main(argv):
         batch_size=512,
     )
 
-    assert model.pi.device == "cuda" and model.piH.device == "cuda"
-
     model.learn(
         total_timesteps=ARGS.max_steps,
         log_interval=1,
