@@ -14,10 +14,10 @@ from stable_baselines3.common.callbacks import (
     ProgressBarCallback,
 )
 from stable_baselines3.common.type_aliases import MaybeCallback
-from stable_baselines3.common.utils import configure_logger, FloatSchedule
+from stable_baselines3.common.utils import configure_logger, get_schedule_fn
 from gymnasium import spaces
 
-from algorithm import HEPOAlgorithm
+from hepo.algorithm import HEPOAlgorithm
 
 
 class HEPO:
@@ -189,14 +189,14 @@ class HEPO:
     def _setup_model(self):
         self.pi._setup_model()
         self.piH._setup_model()
-        self.clip_range = FloatSchedule(self.clip_range)
+        self.clip_range = get_schedule_fn(self.clip_range)
         if self.clip_range_vf is not None:
             if isinstance(self.clip_range_vf, (float, int)):
                 assert self.clip_range_vf > 0, (
                     "'clip_range_vf' must be positive, "
                     "pass 'None' to deactivate vf clipping"
                 )
-            self.clip_range_vf = FloatSchedule(self.clip_range_vf)
+            self.clip_range_vf = get_schedule_fn(self.clip_range_vf)
 
     def learn(
         self,
@@ -263,8 +263,8 @@ class HEPO:
                     self.pi.ep_info_buffer is not None
                     and self.piH.ep_info_buffer is not None
                 )
-                self.pi.dump_logs(iteration)
-                self.piH.dump_logs(iteration)
+                self.pi._dump_logs(iteration)
+                self.piH._dump_logs(iteration)
 
             self.train_pi()
             self.train_piH()
@@ -511,8 +511,8 @@ class HEPO:
                     continue_training = False
                     if self.pi.verbose >= 1:
                         print(
-                            f"Early stopping at step {epoch} due to reaching max kl: {
-                                approx_kl_div:.2f}"
+                            f"""Early stopping at step {epoch} due to reaching max kl: {
+                                approx_kl_div:.2f}"""
                         )
                     break
 
@@ -766,8 +766,8 @@ class HEPO:
                     continue_training = False
                     if self.piH.verbose >= 1:
                         print(
-                            f"Early stopping at step {epoch} due to reaching max kl: {
-                                approx_kl_div:.2f}"
+                            f"""Early stopping at step {epoch} due to reaching max kl: {
+                                approx_kl_div:.2f}"""
                         )
                     break
 

@@ -7,12 +7,10 @@ from stable_baselines3.common.vec_env import VecEnv
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.buffers import RolloutBuffer
 from stable_baselines3.common.utils import obs_as_tensor
-
-
-from buffers import HEPOBuffer
-
-from policies import HEPOPolicy
 from stable_baselines3.common.policies import ActorCriticPolicy
+
+from hepo.buffers import HEPOBuffer
+from hepo.policies import HEPOPolicy
 
 
 class HEPOAlgorithm(OnPolicyAlgorithm):
